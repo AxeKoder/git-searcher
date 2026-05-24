@@ -1,41 +1,77 @@
-//
-//  git_searcherUITests.swift
-//  git-searcherUITests
-//
-//  Created by Daeho Park on 5/24/26.
-//
-
 import XCTest
 
 final class git_searcherUITests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
+    func testEmptyRecentSearchStateIsVisible() throws {
+        let app = makeApp()
         app.launch()
 
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        XCTAssertTrue(app.staticTexts["최근 검색어"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["최근 검색어가 없습니다."].exists)
+    }
+    
+    @MainActor
+    func testSearchShowsResultsAndOpensRepositoryWebView() throws {
+        let app = makeApp()
+        app.launch()
+
+        let searchField = app.searchFields["GitHub 저장소 검색"]
+        XCTAssertTrue(searchField.waitForExistence(timeout: 2))
+        searchField.tap()
+        searchField.typeText("swift")
+
+        submitSearch(in: app)
+
+        XCTAssertTrue(app.staticTexts["총 3개"].waitForExistence(timeout: 3))
+
+        let repositoryTitle = app.collectionViews["searchCollectionView"].staticTexts["swift"]
+        XCTAssertTrue(repositoryTitle.waitForExistence(timeout: 2))
+        repositoryTitle.tap()
+
+        XCTAssertTrue(app.navigationBars["github.com"].waitForExistence(timeout: 2))
     }
 
     @MainActor
-    func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
+    func testSeededRecentSearchesShowKeywordDateAndClearButton() throws {
+        let app = makeApp(seedRecents: true)
+        app.launch()
+
+        XCTAssertTrue(app.staticTexts["최근 검색어"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["swift"].exists)
+        XCTAssertTrue(app.buttons["전체 삭제"].exists)
+    }
+
+    
+
+    private func makeApp(seedRecents: Bool = false) -> XCUIApplication {
+        let app = XCUIApplication()
+        app.launchArguments = ["UITestsUseMockData"]
+
+        if seedRecents {
+            app.launchArguments.append("UITestsSeedRecents")
         }
+
+        return app
+    }
+
+    private func submitSearch(in app: XCUIApplication) {
+        let searchButton = app.keyboards.buttons["Search"]
+        if searchButton.waitForExistence(timeout: 1) {
+            searchButton.tap()
+            return
+        }
+
+        let localizedSearchButton = app.keyboards.buttons["검색"]
+        if localizedSearchButton.waitForExistence(timeout: 1) {
+            localizedSearchButton.tap()
+            return
+        }
+
+        app.typeText("\n")
     }
 }
