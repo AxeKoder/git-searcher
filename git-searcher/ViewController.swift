@@ -1,6 +1,7 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import SnapKit
 
 nonisolated private enum SearchSection: Int, CaseIterable {
     case recents
@@ -47,7 +48,6 @@ final class ViewController: UIViewController {
         titleLabel.accessibilityIdentifier = "searchTitleLabel"
         titleLabel.font = .preferredFont(forTextStyle: .largeTitle)
         titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         searchBar.placeholder = "GitHub 저장소 검색"
         searchBar.accessibilityIdentifier = "repositorySearchBar"
@@ -55,28 +55,23 @@ final class ViewController: UIViewController {
         searchBar.autocapitalizationType = .none
         searchBar.autocorrectionType = .no
         searchBar.returnKeyType = .search
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
 
         sectionTitleLabel.font = .preferredFont(forTextStyle: .headline)
         sectionTitleLabel.accessibilityIdentifier = "sectionTitleLabel"
-        sectionTitleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         clearAllButton.setTitle("전체 삭제", for: .normal)
         clearAllButton.accessibilityIdentifier = "clearAllButton"
         clearAllButton.titleLabel?.font = .preferredFont(forTextStyle: .subheadline)
-        clearAllButton.translatesAutoresizingMaskIntoConstraints = false
 
         let summaryStackView = UIStackView(arrangedSubviews: [sectionTitleLabel, clearAllButton])
         summaryStackView.axis = .horizontal
         summaryStackView.alignment = .center
         summaryStackView.distribution = .equalSpacing
-        summaryStackView.translatesAutoresizingMaskIntoConstraints = false
 
         collectionView.backgroundColor = .clear
         collectionView.accessibilityIdentifier = "searchCollectionView"
         collectionView.keyboardDismissMode = .onDrag
         collectionView.alwaysBounceVertical = true
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         emptyLabel.font = .preferredFont(forTextStyle: .body)
         emptyLabel.accessibilityIdentifier = "emptyLabel"
@@ -89,24 +84,25 @@ final class ViewController: UIViewController {
         view.addSubview(summaryStackView)
         view.addSubview(collectionView)
 
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+        titleLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
 
-            searchBar.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 12),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+        searchBar.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview().inset(12)
+        }
 
-            summaryStackView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 12),
-            summaryStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            summaryStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+        summaryStackView.snp.makeConstraints {
+            $0.top.equalTo(searchBar.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
 
-            collectionView.topAnchor.constraint(equalTo: summaryStackView.bottomAnchor, constant: 8),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(summaryStackView.snp.bottom).offset(8)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
     }
 
     private func configureDataSource() {

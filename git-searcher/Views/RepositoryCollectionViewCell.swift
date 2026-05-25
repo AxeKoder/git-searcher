@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 final class RepositoryCollectionViewCell: UICollectionViewCell {
     private let thumbnailImageView = UIImageView()
@@ -46,42 +47,37 @@ final class RepositoryCollectionViewCell: UICollectionViewCell {
         thumbnailImageView.layer.cornerRadius = 22
         thumbnailImageView.tintColor = .secondaryLabel
         thumbnailImageView.image = UIImage(systemName: "shippingbox")
-        thumbnailImageView.translatesAutoresizingMaskIntoConstraints = false
 
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.numberOfLines = 1
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
 
         ownerLabel.font = .preferredFont(forTextStyle: .subheadline)
         ownerLabel.textColor = .secondaryLabel
         ownerLabel.numberOfLines = 1
-        ownerLabel.translatesAutoresizingMaskIntoConstraints = false
 
         descriptionLabel.font = .preferredFont(forTextStyle: .footnote)
         descriptionLabel.textColor = .tertiaryLabel
         descriptionLabel.numberOfLines = 2
-        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
 
         let textStackView = UIStackView(arrangedSubviews: [titleLabel, ownerLabel, descriptionLabel])
         textStackView.axis = .vertical
         textStackView.spacing = 4
-        textStackView.translatesAutoresizingMaskIntoConstraints = false
 
         contentView.addSubview(thumbnailImageView)
         contentView.addSubview(textStackView)
 
-        NSLayoutConstraint.activate([
-            thumbnailImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            thumbnailImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14),
-            thumbnailImageView.widthAnchor.constraint(equalToConstant: 44),
-            thumbnailImageView.heightAnchor.constraint(equalToConstant: 44),
-            thumbnailImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -14),
+        thumbnailImageView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(16)
+            $0.top.equalToSuperview().inset(14)
+            $0.size.equalTo(44)
+            $0.bottom.lessThanOrEqualToSuperview().inset(14)
+        }
 
-            textStackView.leadingAnchor.constraint(equalTo: thumbnailImageView.trailingAnchor, constant: 12),
-            textStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            textStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            textStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12)
-        ])
+        textStackView.snp.makeConstraints {
+            $0.leading.equalTo(thumbnailImageView.snp.trailing).offset(12)
+            $0.top.bottom.equalToSuperview().inset(12)
+            $0.trailing.equalToSuperview().inset(16)
+        }
     }
 
     private func loadImage(from url: URL?) {

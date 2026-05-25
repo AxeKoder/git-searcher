@@ -1,5 +1,6 @@
 import UIKit
 import WebKit
+import SnapKit
 
 final class WebViewController: UIViewController {
     private let url: URL
@@ -33,15 +34,12 @@ final class WebViewController: UIViewController {
 
     private func configureWebView() {
         view.backgroundColor = .systemBackground
-        webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
 
-        NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        webView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
     }
 
     @objc private func doneButtonTapped() {

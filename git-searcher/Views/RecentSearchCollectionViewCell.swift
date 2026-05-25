@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 final class RecentSearchCollectionViewCell: UICollectionViewCell {
     private static let dateFormatter: DateFormatter = {
@@ -42,34 +43,31 @@ final class RecentSearchCollectionViewCell: UICollectionViewCell {
 
         keywordLabel.font = .preferredFont(forTextStyle: .body)
         keywordLabel.numberOfLines = 1
-        keywordLabel.translatesAutoresizingMaskIntoConstraints = false
 
         dateLabel.font = .preferredFont(forTextStyle: .caption1)
         dateLabel.textColor = .secondaryLabel
-        dateLabel.translatesAutoresizingMaskIntoConstraints = false
 
         deleteButton.setTitle("삭제", for: .normal)
         deleteButton.titleLabel?.font = .preferredFont(forTextStyle: .footnote)
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
 
         let textStackView = UIStackView(arrangedSubviews: [keywordLabel, dateLabel])
         textStackView.axis = .vertical
         textStackView.spacing = 4
-        textStackView.translatesAutoresizingMaskIntoConstraints = false
 
         contentView.addSubview(textStackView)
         contentView.addSubview(deleteButton)
 
-        NSLayoutConstraint.activate([
-            textStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            textStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
-            textStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
+        textStackView.snp.makeConstraints {
+            $0.leading.equalToSuperview().inset(16)
+            $0.top.bottom.equalToSuperview().inset(12)
+        }
 
-            deleteButton.leadingAnchor.constraint(greaterThanOrEqualTo: textStackView.trailingAnchor, constant: 12),
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            deleteButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        ])
+        deleteButton.snp.makeConstraints {
+            $0.leading.greaterThanOrEqualTo(textStackView.snp.trailing).offset(12)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.centerY.equalToSuperview()
+        }
     }
 
     @objc private func deleteButtonTapped() {

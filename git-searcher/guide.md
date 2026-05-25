@@ -41,6 +41,7 @@
   1. RecentSearchListPolicy가 최근 검색어 목록을 최대 10개로 유지하고 날짜 내림차순으로 정렬하는지 검증합니다.
   2. SearchViewState가 입력 검색어를 기준으로 최근 검색어 기반 자동완성 후보를 필터링하는지 검증합니다.
   3. RepositorySearchResponse가 GitHub 검색 API 응답의 총 개수, 저장소명, 소유자, URL 정보를 올바르게 디코딩하는지 검증합니다.
+  4. HTTP 실패 상태 코드가 GitHubRepositoryServiceError.invalidResponse로 감지되는지 검증합니다.
 
 - ui test
   1. 최근 검색어가 없을 때 검색 화면의 빈 상태가 노출되는지 검증합니다.

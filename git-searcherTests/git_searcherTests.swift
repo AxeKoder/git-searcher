@@ -57,4 +57,17 @@ final class git_searcherTests: XCTestCase {
         XCTAssertEqual(response.items.first?.htmlURL.absoluteString, "https://github.com/apple/swift")
         XCTAssertEqual(response.items.first?.owner.avatarURL?.host(), "avatars.githubusercontent.com")
     }
+
+    func testInvalidHTTPStatusCodeIsDetectedAsInvalidResponseError() throws {
+        let error = try XCTUnwrap(GitHubRepositoryServiceError.invalidResponseError(for: 500))
+
+        guard case let .invalidResponse(statusCode) = error else {
+            XCTFail("Expected invalidResponse error")
+            return
+        }
+
+        XCTAssertEqual(statusCode, 500)
+        XCTAssertEqual(error.errorDescription, "GitHub API 요청에 실패했습니다. 상태 코드: 500")
+        XCTAssertNil(GitHubRepositoryServiceError.invalidResponseError(for: 200))
+    }
 }

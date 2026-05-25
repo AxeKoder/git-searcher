@@ -10,6 +10,11 @@ enum GitHubRepositoryServiceError: LocalizedError {
     case invalidResponse(statusCode: Int)
     case missingData
 
+    static func invalidResponseError(for statusCode: Int) -> GitHubRepositoryServiceError? {
+        guard !(200..<300).contains(statusCode) else { return nil }
+        return .invalidResponse(statusCode: statusCode)
+    }
+
     var errorDescription: String? {
         switch self {
         case .invalidURL:
@@ -56,8 +61,8 @@ final class GitHubRepositoryService: GitHubRepositoryServicing {
                 }
 
                 if let httpResponse = response as? HTTPURLResponse,
-                   !(200..<300).contains(httpResponse.statusCode) {
-                    single(.failure(GitHubRepositoryServiceError.invalidResponse(statusCode: httpResponse.statusCode)))
+                   let error = GitHubRepositoryServiceError.invalidResponseError(for: httpResponse.statusCode) {
+                    single(.failure(error))
                     return
                 }
 

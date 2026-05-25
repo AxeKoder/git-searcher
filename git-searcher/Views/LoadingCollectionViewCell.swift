@@ -1,4 +1,5 @@
 import UIKit
+import SnapKit
 
 final class LoadingCollectionViewCell: UICollectionViewCell {
     private let activityIndicatorView = UIActivityIndicatorView(style: .medium)
@@ -18,14 +19,15 @@ final class LoadingCollectionViewCell: UICollectionViewCell {
     }
 
     private func configureViews() {
-        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(activityIndicatorView)
 
-        NSLayoutConstraint.activate([
-            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 52)
-        ])
+        activityIndicatorView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+
+        contentView.snp.makeConstraints {
+            $0.height.greaterThanOrEqualTo(52)
+        }
     }
 }
 

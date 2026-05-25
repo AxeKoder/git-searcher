@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		ECE70D5A2FC216AA0077E170 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = ECE70D592FC216AA0077E170 /* RxSwift */; };
 		ECE70D5C2FC216AA0077E170 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = ECE70D5B2FC216AA0077E170 /* RxCocoa */; };
+		ECE70D5E2FC216AA0077E170 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = ECE70D5D2FC216AA0077E170 /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 			files = (
 				ECE70D5A2FC216AA0077E170 /* RxSwift in Frameworks */,
 				ECE70D5C2FC216AA0077E170 /* RxCocoa in Frameworks */,
+				ECE70D5E2FC216AA0077E170 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -134,6 +136,7 @@
 			packageProductDependencies = (
 				ECE70D592FC216AA0077E170 /* RxSwift */,
 				ECE70D5B2FC216AA0077E170 /* RxCocoa */,
+				ECE70D5D2FC216AA0077E170 /* SnapKit */,
 			);
 			productName = "git-searcher";
 			productReference = ECE70D202FC2118C0077E170 /* git-searcher.app */;
@@ -645,6 +648,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = ECE70D562FC215120077E170 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxCocoa;
+		};
+		ECE70D5D2FC216AA0077E170 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ECE70D572FC2152F0077E170 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
